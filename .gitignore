@@ -1,0 +1,55 @@
+# --- FILE PENTING (JANGAN UPLOAD) ---
+.env
+.env.backup
+.env.production
+/auth.json
+/vendor
+/node_modules
+
+# --- LOGS & SYSTEM ---
+*.log
+.DS_Store
+Thumbs.db
+
+# --- EDITOR & IDE ---
+.phpactor.json
+/.fleet
+/.idea
+/.nova
+/.vscode
+/.zed
+/.phpunit.cache
+.phpunit.result.cache
+
+# --- LARAVEL BUILD ---
+/public/build
+/public/hot
+/public/storage
+
+# --- STORAGE & CACHE (PENTING SUPAYA REPO BERSIH) ---
+# 1. Ignore kunci OAuth (Passport/Sanctum)
+/storage/*.key
+
+# 2. Ignore semua file Cache Framework (View, Session, Cache)
+/storage/framework/cache/data/*
+/storage/framework/sessions/*
+/storage/framework/testing/*
+/storage/framework/views/*
+
+# 3. Ignore Log Laravel
+/storage/logs/*
+!/storage/logs/.gitignore
+
+# 4. Ignore Bootstrap Cache (File optimasi)
+/bootstrap/cache/*
+!/bootstrap/cache/.gitignore
+
+# --- USER UPLOADS (FOTO MEMBER & BUKU) ---
+# Kita ingin foldernya ada, tapi isinya jangan di-upload ke Git
+/storage/app/public/*
+!/storage/app/public/.gitignore
+
+# --- LAINNYA ---
+/storage/pail
+Homestead.json
+Homestead.yaml
