@@ -136,6 +136,54 @@
     setInterval(updateClock, 1000);
     updateClock(); // Jalankan langsung saat load agar tidak menunggu 1 detik
 </script>
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 
+    <script>
+        // --- A. NOTIFIKASI SUKSES / ERROR (DARI SESSION LARAVEL) ---
+        @if(session('success'))
+            Swal.fire({
+                icon: 'success',
+                title: 'Berhasil!',
+                text: '{{ session('success') }}',
+                showConfirmButton: false,
+                timer: 2000 // Hilang otomatis dalam 2 detik
+            });
+        @elseif(session('error'))
+            Swal.fire({
+                icon: 'error',
+                title: 'Gagal!',
+                text: '{{ session('error') }}',
+            });
+        @endif
+
+        // --- B. KONFIRMASI AKSI (HAPUS / UBAH STATUS) ---
+        // Script ini akan mencegat semua form yang punya class "alert-confirm"
+        document.addEventListener('submit', function(e) {
+            if (e.target.classList.contains('alert-confirm')) {
+                e.preventDefault(); // Stop form submit sementara
+                
+                var form = e.target;
+                var message = form.getAttribute('data-confirm-message') || 'Apakah Anda yakin?';
+                var icon = form.getAttribute('data-confirm-icon') || 'warning';
+                var confirmText = form.getAttribute('data-confirm-text') || 'Ya, Lanjutkan!';
+                var confirmColor = form.getAttribute('data-confirm-color') || '#3085d6';
+
+                Swal.fire({
+                    title: 'Konfirmasi',
+                    text: message,
+                    icon: icon,
+                    showCancelButton: true,
+                    confirmButtonColor: confirmColor,
+                    cancelButtonColor: '#d33',
+                    confirmButtonText: confirmText,
+                    cancelButtonText: 'Batal'
+                }).then((result) => {
+                    if (result.isConfirmed) {
+                        form.submit(); // Lanjutkan submit jika user klik Ya
+                    }
+                });
+            }
+        });
+    </script>
 </body>
 </html>

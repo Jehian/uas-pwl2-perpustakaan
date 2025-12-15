@@ -8,20 +8,12 @@ use Illuminate\Http\Request;
 
 class CategoryController extends Controller
 {
-    // 1. Tampilkan Daftar Kategori
     public function index()
     {
-        $categories = Category::latest()->get();
+        $categories = Category::withCount('books')->latest()->paginate(10);
         return view('admin.categories.index', compact('categories'));
     }
 
-    // 2. Tampilkan Form Tambah
-    public function create()
-    {
-        return view('admin.categories.create');
-    }
-
-    // 3. Simpan Data
     public function store(Request $request)
     {
         $request->validate([
@@ -30,15 +22,40 @@ class CategoryController extends Controller
 
         Category::create($request->all());
 
-        return redirect()->route('admin.categories.index')
-                         ->with('success', 'Kategori berhasil ditambahkan!');
+        return back()->with('success', 'Kategori berhasil ditambahkan!');
     }
 
-    // 4. Hapus Data
+    // --- FITUR BARU 1: UPDATE KATEGORI ---
+    public function update(Request $request, Category $category)
+    {
+        $request->validate([
+            'name' => 'required|unique:categories,name,' . $category->id
+        ]);
+
+        $category->update([
+            'name' => $request->name
+        ]);
+
+        return back()->with('success', 'Nama kategori berhasil diperbarui!');
+    }
+
+    // --- FITUR BARU 2: LIHAT DAFTAR BUKU ---
+    public function show(Category $category)
+    {
+        // Ambil buku yang punya category_id sesuai kategori ini
+        $books = $category->books()->with('copies')->latest()->paginate(10);
+        
+        return view('admin.categories.show', compact('category', 'books'));
+    }
+
     public function destroy(Category $category)
     {
+        // Cek dulu, kalau masih ada buku di kategori ini, jangan dihapus
+        if($category->books()->count() > 0) {
+            return back()->with('error', 'Gagal hapus! Masih ada buku di kategori ini.');
+        }
+
         $category->delete();
-        return redirect()->route('admin.categories.index')
-                         ->with('success', 'Kategori berhasil dihapus!');
+        return back()->with('success', 'Kategori berhasil dihapus.');
     }
 }

@@ -78,6 +78,7 @@
                                 <small class="text-muted" style="font-size: 11px;">Data tidak tersedia</small>
                             @endif
                         </td>
+
                         <td>
                             <div class="d-flex align-items-center">
                                 @if($loan->bookCopy->book->cover)
@@ -151,8 +152,12 @@
                                 </button>
 
                                 @if($loan->status == 'active')
-                                    <form onsubmit="return confirm('Sudah dikembalikan?');" 
-                                          action="{{ route('admin.loans.complete', $loan->id) }}" method="POST">
+                                    <form action="{{ route('admin.loans.complete', $loan->id) }}" method="POST"
+                                          class="d-inline alert-confirm"
+                                          data-confirm-message="Selesaikan peminjaman ini? Stok buku akan bertambah otomatis."
+                                          data-confirm-text="Ya, Terima Buku"
+                                          data-confirm-color="#198754"
+                                          data-confirm-icon="question">
                                         @csrf @method('PUT') 
                                         <button type="submit" class="btn btn-sm btn-success" title="Kembalikan Buku">
                                             <i class="fas fa-check"></i>
@@ -162,10 +167,13 @@
                                     <button class="btn btn-sm btn-secondary" disabled><i class="fas fa-check"></i></button>
                                 @endif
 
-                                <form onsubmit="return confirm('Yakin ingin menghapus riwayat ini? Data yang dihapus tidak bisa dikembalikan.');" 
-                                      action="{{ route('admin.loans.destroy', $loan->id) }}" method="POST">
-                                    @csrf 
-                                    @method('DELETE') 
+                                <form action="{{ route('admin.loans.destroy', $loan->id) }}" method="POST"
+                                      class="d-inline alert-confirm"
+                                      data-confirm-message="Yakin ingin menghapus riwayat ini? Data yang dihapus tidak bisa dikembalikan."
+                                      data-confirm-text="Ya, Hapus!"
+                                      data-confirm-color="#dc3545"
+                                      data-confirm-icon="warning">
+                                    @csrf @method('DELETE') 
                                     <button type="submit" class="btn btn-sm btn-danger" title="Hapus Riwayat">
                                         <i class="fas fa-trash"></i>
                                     </button>
@@ -181,7 +189,7 @@
                                             </h5>
                                             <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
                                         </div>
-                                        <div class="modal-body p-4">
+                                        <div class="modal-body p-4 text-start">
                                             <div class="row">
                                                 <div class="col-md-5 text-center border-end">
                                                     @if($loan->bookCopy->book->cover)

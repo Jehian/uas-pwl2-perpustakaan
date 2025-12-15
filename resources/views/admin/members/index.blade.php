@@ -80,10 +80,16 @@
                                 <i class="fas fa-edit"></i>
                             </a>
 
-                            <form onsubmit="return confirm('PERINGATAN: Anda yakin ingin menghapus member ini secara PERMANEN? Data yang dihapus tidak bisa dikembalikan.');" 
-                                  action="{{ route('admin.members.destroy', $member->id) }}" method="POST">
-                                @csrf
+                           <form action="{{ route('admin.members.destroy', $member->id) }}" method="POST" 
+                                class="d-inline alert-confirm"
+                                data-confirm-message="Yakin ingin menghapus member ini secara PERMANEN?"
+                                data-confirm-text="Ya, Hapus!"
+                                data-confirm-color="#dc3545"
+                                data-confirm-icon="warning">
+                                
+                                @csrf 
                                 @method('DELETE')
+                                
                                 <button type="submit" class="btn btn-sm btn-danger" title="Hapus Permanen">
                                     <i class="fas fa-trash"></i>
                                 </button>

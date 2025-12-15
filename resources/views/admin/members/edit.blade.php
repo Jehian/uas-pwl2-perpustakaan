@@ -13,8 +13,13 @@
         
         <div class="d-flex gap-2">
             @if($member->is_active)
-                <form onsubmit="return confirm('Non-aktifkan member ini? Dia tidak akan bisa meminjam buku lagi, tapi datanya TETAP ADA.');" 
-                      action="{{ route('admin.members.update_status', $member->id) }}" method="POST">
+                <form action="{{ route('admin.members.update_status', $member->id) }}" method="POST"
+                    class="alert-confirm"
+                    data-confirm-message="Non-aktifkan member ini? Dia tidak akan bisa meminjam buku lagi."
+                    data-confirm-text="Ya, Non-Aktifkan"
+                    data-confirm-color="#dc3545"
+                    data-confirm-icon="question">
+                    
                     @csrf @method('PATCH')
                     <input type="hidden" name="is_active" value="0">
                     
@@ -23,8 +28,13 @@
                     </button>
                 </form>
             @else
-                <form onsubmit="return confirm('Aktifkan kembali member ini?');" 
-                      action="{{ route('admin.members.update_status', $member->id) }}" method="POST">
+                <form action="{{ route('admin.members.update_status', $member->id) }}" method="POST"
+                    class="alert-confirm"
+                    data-confirm-message="Aktifkan kembali member ini?"
+                    data-confirm-text="Ya, Aktifkan"
+                    data-confirm-color="#198754"
+                    data-confirm-icon="success">
+
                     @csrf @method('PATCH')
                     <input type="hidden" name="is_active" value="1">
                     
