@@ -6,23 +6,33 @@ use App\Http\Controllers\Controller;
 use App\Models\Book;
 use App\Models\Category;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Storage; // Penting untuk hapus gambar
+use Illuminate\Support\Facades\Storage; 
 
 class BookController extends Controller
 {
-    public function index()
+    public function index(Request $request)
     {
-        // UBAH get() MENJADI paginate(7)
-        $books = Book::with('category')
-                     ->latest()
-                     ->paginate(7); 
-                     
+        // 1. Mulai Query
+        $query = Book::with('category');
+
+        // 2. Logika Pencarian
+        if ($request->has('search') && $request->search != '') {
+            $search = $request->search;
+            $query->where(function($q) use ($search) {
+                $q->where('title', 'like', '%' . $search . '%')
+                  ->orWhere('author', 'like', '%' . $search . '%')
+                  ->orWhere('book_code', 'like', '%' . $search . '%');
+            });
+        }
+
+        // 3. Ambil data (Paginate 7) + Latest
+        $books = $query->latest()->paginate(7);
+                      
         return view('admin.books.index', compact('books'));
     }
 
     public function create()
     {
-        // Kita butuh data kategori untuk dropdown pilihan
         $categories = Category::all();
         return view('admin.books.create', compact('categories'));
     }
@@ -31,7 +41,7 @@ class BookController extends Controller
     {
         $request->validate([
             'book_code' => 'required|unique:books,book_code',
-            'isbn' => 'nullable|string|max:20', // <--- TAMBAHKAN INI
+            'isbn' => 'nullable|string|max:20',
             'title' => 'required',
             'category_id' => 'required',
             'cover' => 'image|mimes:jpeg,png,jpg|max:2048'
@@ -39,9 +49,7 @@ class BookController extends Controller
 
         $data = $request->all();
 
-        // LOGIKA UPLOAD GAMBAR
         if ($request->hasFile('cover')) {
-            // Simpan gambar ke folder: storage/app/public/covers
             $path = $request->file('cover')->store('covers', 'public');
             $data['cover'] = $path;
         }
@@ -53,12 +61,11 @@ class BookController extends Controller
 
     public function destroy(Book $book)
     {
-        // Hapus gambar cover lama jika ada
         if ($book->cover) {
             Storage::disk('public')->delete($book->cover);
         }
         
         $book->delete();
-        return redirect()->route('admin.books.index')->with('success', 'Buku dihapus!');
+        return redirect()->route('admin.books.index')->with('success', 'Buku berhasil dihapus!');
     }
 }
