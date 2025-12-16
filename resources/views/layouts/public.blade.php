@@ -78,7 +78,7 @@
         <div class="container">
             <p class="mb-0 text-muted small">
                 &copy; {{ date('Y') }} Sistem Perpustakaan Digital. 
-                <br>Dibuat untuk keperluan manajemen perpustakaan sekolah.
+                <br>Dibuat untuk keperluan manajemen perpustakaan.
             </p>
         </div>
     </footer>

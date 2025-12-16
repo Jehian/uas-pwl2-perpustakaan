@@ -2,16 +2,31 @@
 
 @section('content')
 <div class="container-fluid">
-    <div class="d-flex justify-content-between align-items-center mb-4">
-        <h4 class="fw-bold">Data Buku Induk</h4>
-        <a href="{{ route('admin.books.create') }}" class="btn btn-primary rounded-pill px-4 fw-bold">
-            <i class="fas fa-plus me-1"></i> Tambah Buku
-        </a>
+    <div class="d-flex flex-column flex-md-row justify-content-between align-items-center mb-4">
+        <h4 class="fw-bold mb-3 mb-md-0">Data Buku Induk</h4>
+        <div class="d-flex gap-2">
+            <form action="{{ route('admin.books.index') }}" method="GET" class="d-flex gap-2">
+                <div class="input-group">
+                    <input type="text" name="search" class="form-control" placeholder="Cari judul / penulis..." value="{{ request('search') }}">
+                    <button class="btn btn-outline-primary" type="submit"><i class="fas fa-search"></i></button>
+                </div>
+            </form>
+            <a href="{{ route('admin.books.create') }}" class="btn btn-primary rounded-pill px-4 fw-bold text-nowrap">
+                <i class="fas fa-plus me-1"></i> Tambah Buku
+            </a>
+        </div>
     </div>
 
     @if(session('success'))
         <div class="alert alert-success alert-dismissible fade show">
-            {{ session('success') }}
+            <i class="fas fa-check-circle me-2"></i> {{ session('success') }}
+            <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+        </div>
+    @endif
+
+    @if(session('error'))
+        <div class="alert alert-danger alert-dismissible fade show">
+            <i class="fas fa-exclamation-triangle me-2"></i> {{ session('error') }}
             <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
         </div>
     @endif
@@ -24,7 +39,7 @@
                         <th width="5%">No</th>
                         <th width="10%">Cover</th>
                         <th>Info Buku</th>
-                        <th>Kategori</th>
+                        <th width="15%">Kategori</th>
                         <th width="15%">Aksi</th>
                     </tr>
                 </thead>
@@ -32,47 +47,49 @@
                     @forelse($books as $index => $book)
                     <tr>
                         <td class="text-center">{{ $books->firstItem() + $index }}</td>
-                        
                         <td class="text-center">
                             @if($book->cover)
-                                <img src="{{ asset('storage/' . $book->cover) }}" height="80" class="rounded shadow-sm">
+                                <img src="{{ asset('storage/' . $book->cover) }}" class="rounded shadow-sm" style="width: 60px; height: 85px; object-fit: cover;">
                             @else
-                                <span class="text-muted small">No Cover</span>
+                                <div class="bg-light d-inline-flex align-items-center justify-content-center border rounded" style="width: 60px; height: 85px;"><i class="fas fa-book text-muted fa-2x"></i></div>
                             @endif
                         </td>
                         <td>
-                            <div class="fw-bold text-primary">{{ $book->title }}</div>
-                            <small class="text-muted">
-                                Kode: {{ $book->book_code }} 
+                            <h6 class="fw-bold text-dark mb-1">{{ $book->title }}</h6>
+                            <div class="text-muted small">
+                                Kode: {{ $book->book_code }}
                                 @if($book->isbn) | ISBN: {{ $book->isbn }} @endif
                                 <br>
                                 Oleh: {{ $book->author }} ({{ $book->publication_year }})
-                            </small>
+                            </div>
                         </td>
                         <td class="text-center">
-                            <span class="badge bg-info text-dark">
-                                {{ $book->category->name ?? 'Tidak Ada Kategori' }}
-                            </span>
+                            <span class="badge bg-info text-dark rounded-pill px-3">{{ $book->category->name ?? 'Tidak Ada Kategori' }}</span>
                         </td>
                         <td class="text-center">
                             <div class="d-flex justify-content-center gap-1">
-                                <button type="button" class="btn btn-sm btn-info text-white" 
-                                        data-bs-toggle="modal" data-bs-target="#detailBookModal-{{ $book->id }}" title="Lihat Detail">
+                                <button type="button" class="btn btn-sm btn-info text-white" data-bs-toggle="modal" data-bs-target="#detailBookModal-{{ $book->id }}" title="Lihat Detail">
                                     <i class="fas fa-eye"></i>
                                 </button>
-
                                 <a href="{{ route('admin.books.copies.index', $book->id) }}" class="btn btn-sm btn-success text-white" title="Kelola Stok">
-                                    <i class="fas fa-boxes"></i> 
+                                    <i class="fas fa-boxes"></i>
                                 </a>
 
-                                <form onsubmit="return confirm('Hapus buku ini?');" 
-                                      action="{{ route('admin.books.destroy', $book->id) }}" method="POST">
-                                    @csrf @method('DELETE')
-                                    <button class="btn btn-sm btn-danger" title="Hapus Buku"><i class="fas fa-trash"></i></button>
+                                <form action="{{ route('admin.books.destroy', $book->id) }}" method="POST"
+                                      class="d-inline alert-confirm"
+                                      data-confirm-message="Hapus buku '{{ $book->title }}'?"
+                                      data-confirm-text="Ya, Hapus!"
+                                      data-confirm-color="#dc3545">
+                                      
+                                    @csrf 
+                                    @method('DELETE')
+                                    
+                                    <button type="submit" class="btn btn-sm btn-danger" title="Hapus Buku">
+                                        <i class="fas fa-trash"></i>
+                                    </button>
                                 </form>
-                            </div>
-
-                            <div class="modal fade" id="detailBookModal-{{ $book->id }}" tabindex="-1">
+                                </div>
+                             <div class="modal fade" id="detailBookModal-{{ $book->id }}" tabindex="-1">
                                 <div class="modal-dialog modal-lg modal-dialog-centered">
                                     <div class="modal-content border-0 shadow">
                                         <div class="modal-header bg-primary text-white">
@@ -143,12 +160,11 @@
                             </td>
                     </tr>
                     @empty
-                    <tr><td colspan="5" class="text-center py-4">Belum ada data buku.</td></tr>
+                    <tr><td colspan="5" class="text-center py-5">Belum ada data buku.</td></tr>
                     @endforelse
                 </tbody>
             </table>
         </div>
-
         <div class="d-flex flex-column flex-md-row justify-content-between align-items-center mt-4">
             <div class="mb-2 mb-md-0 text-muted small">
                 Menampilkan <span class="fw-bold">{{ $books->firstItem() }}</span> sampai <span class="fw-bold">{{ $books->lastItem() }}</span> dari total <span class="fw-bold">{{ $books->total() }}</span> data
@@ -157,7 +173,6 @@
                 {{ $books->links() }}
             </div>
         </div>
-
     </div>
 </div>
 @endsection
