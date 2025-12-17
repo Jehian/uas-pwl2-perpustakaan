@@ -60,9 +60,17 @@
                         </td>
                         <td>Baik</td>
                         <td class="text-end pe-4">
-                            <form onsubmit="return confirm('Hapus stok fisik ini?');" action="{{ route('admin.books.copies.destroy', $copy->id) }}" method="POST">
-                                @csrf @method('DELETE')
-                                <button class="btn btn-sm btn-outline-danger">
+                            <form action="{{ route('admin.books.copies.destroy', $copy->id) }}" method="POST"
+                                class="d-inline alert-confirm"
+                                data-confirm-message="Hapus stok fisik '{{ $copy->copy_code }}'?"
+                                data-confirm-text="Ya, Hapus!"
+                                data-confirm-color="#dc3545">
+                                
+                                @csrf 
+                                @method('DELETE')
+                                
+                                {{-- Saya tetap menggunakan btn-outline-danger agar serasi dengan tampilan tabel --}}
+                                <button type="submit" class="btn btn-sm btn-outline-danger" title="Hapus Stok">
                                     <i class="fas fa-trash"></i> Hapus
                                 </button>
                             </form>

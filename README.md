@@ -168,6 +168,7 @@ Agar pengingat H-1 berjalan, buka terminal baru dan jalankan:
 
 ```bash
 php artisan schedule:work
+php artisan loans:send-reminders
 ```
 
 ---

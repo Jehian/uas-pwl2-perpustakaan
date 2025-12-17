@@ -80,7 +80,7 @@
 
     <div class="col-md-10 col-12 d-flex flex-column h-100">
         <div class="top-header">
-            <h5 class="m-0 fw-bold">PERPUSTAKAAN</h5>
+            <h5 class="m-0 fw-bold">DASHBOARD</h5>
             <div class="d-flex align-items-center gap-3">
                 
                 <small id="realtime-clock" class="fw-bold text-white" style="letter-spacing: 1px;">
