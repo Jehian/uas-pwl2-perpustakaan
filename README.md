@@ -1,59 +1,212 @@
-<p align="center"><a href="https://laravel.com" target="_blank"><img src="https://raw.githubusercontent.com/laravel/art/master/logo-lockup/5%20SVG/2%20CMYK/1%20Full%20Color/laravel-logolockup-cmyk-red.svg" width="400" alt="Laravel Logo"></a></p>
+# 📚 Sistem Informasi Perpustakaan Digital
 
-<p align="center">
-<a href="https://github.com/laravel/framework/actions"><img src="https://github.com/laravel/framework/workflows/tests/badge.svg" alt="Build Status"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/dt/laravel/framework" alt="Total Downloads"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/v/laravel/framework" alt="Latest Stable Version"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/l/laravel/framework" alt="License"></a>
-</p>
+Aplikasi manajemen perpustakaan berbasis web yang modern dan responsif, dibangun menggunakan framework **Laravel**. Aplikasi ini menangani sirkulasi buku, manajemen anggota, stok buku, perhitungan denda otomatis, serta dilengkapi dengan katalog publik.
 
-## About Laravel
+## ✨ Fitur Utama
 
-Laravel is a web application framework with expressive, elegant syntax. We believe development must be an enjoyable and creative experience to be truly fulfilling. Laravel takes the pain out of development by easing common tasks used in many web projects, such as:
+### 🌍 Halaman Publik (Pengunjung)
 
-- [Simple, fast routing engine](https://laravel.com/docs/routing).
-- [Powerful dependency injection container](https://laravel.com/docs/container).
-- Multiple back-ends for [session](https://laravel.com/docs/session) and [cache](https://laravel.com/docs/cache) storage.
-- Expressive, intuitive [database ORM](https://laravel.com/docs/eloquent).
-- Database agnostic [schema migrations](https://laravel.com/docs/migrations).
-- [Robust background job processing](https://laravel.com/docs/queues).
-- [Real-time event broadcasting](https://laravel.com/docs/broadcasting).
+* **Katalog Buku:** Tampilan grid buku dengan cover, judul, penulis, dan kategori.
+* **Pencarian Real-time:** Cari buku berdasarkan Judul, Penulis, atau Kategori.
+* **Cek Ketersediaan:** Indikator stok otomatis (Hijau = Tersedia, Merah = Habis).
+* **Detail Pop-up:** Melihat sinopsis dan detail lengkap tanpa reload halaman.
 
-Laravel is accessible, powerful, and provides tools required for large, robust applications.
+### 🛡️ Panel Admin
 
-## Learning Laravel
+* **Dashboard:** Ringkasan statistik perpustakaan.
+* **Manajemen Buku:**
 
-Laravel has the most extensive and thorough [documentation](https://laravel.com/docs) and video tutorial library of all modern web application frameworks, making it a breeze to get started with the framework. You can also check out [Laravel Learn](https://laravel.com/learn), where you will be guided through building a modern Laravel application.
+  * CRUD Buku (Judul, ISBN, Penerbit, Tahun, Cover).
+  * Manajemen Stok (Eksemplar) per buku.
+* **Manajemen Anggota:**
 
-If you don't feel like reading, [Laracasts](https://laracasts.com) can help. Laracasts contains thousands of video tutorials on a range of topics including Laravel, modern PHP, unit testing, and JavaScript. Boost your skills by digging into our comprehensive video library.
+  * Registrasi anggota baru (Otomatis kirim Email Selamat Datang).
+  * Edit & Non-aktifkan anggota.
+* **Sirkulasi (Peminjaman & Pengembalian):**
 
-## Laravel Sponsors
+  * Transaksi peminjaman buku.
+  * Pengembalian dengan kalkulasi **Denda Keterlambatan** otomatis.
+  * Validasi stok (Tidak bisa pinjam jika stok habis).
+* **Notifikasi & UI:**
 
-We would like to extend our thanks to the following sponsors for funding Laravel development. If you are interested in becoming a sponsor, please visit the [Laravel Partners program](https://partners.laravel.com).
+  * Konfirmasi hapus/aksi menggunakan **SweetAlert2**.
+  * Feedback pesan sukses/error yang interaktif.
 
-### Premium Partners
+### 🤖 Otomatisasi
 
-- **[Vehikl](https://vehikl.com)**
-- **[Tighten Co.](https://tighten.co)**
-- **[Kirschbaum Development Group](https://kirschbaumdevelopment.com)**
-- **[64 Robots](https://64robots.com)**
-- **[Curotec](https://www.curotec.com/services/technologies/laravel)**
-- **[DevSquad](https://devsquad.com/hire-laravel-developers)**
-- **[Redberry](https://redberry.international/laravel-development)**
-- **[Active Logic](https://activelogic.com)**
+* **Email Reminder:** Sistem otomatis mengirim email pengingat H-1 sebelum jatuh tempo kepada peminjam via Scheduler.
 
-## Contributing
+---
 
-Thank you for considering contributing to the Laravel framework! The contribution guide can be found in the [Laravel documentation](https://laravel.com/docs/contributions).
+## ⚙️ Persyaratan Sistem (Requirements)
 
-## Code of Conduct
+* PHP >= 8.1
+* Composer
+* MySQL / MariaDB
+* Node.js & NPM
+* Git
 
-In order to ensure that the Laravel community is welcoming to all, please review and abide by the [Code of Conduct](https://laravel.com/docs/contributions#code-of-conduct).
+---
 
-## Security Vulnerabilities
+## 🚀 Panduan Instalasi (Langkah demi Langkah)
 
-If you discover a security vulnerability within Laravel, please send an e-mail to Taylor Otwell via [taylor@laravel.com](mailto:taylor@laravel.com). All security vulnerabilities will be promptly addressed.
+### 1. Clone Repository
 
-## License
+```bash
+git clone https://github.com/username-anda/nama-repo-perpustakaan.git
+cd nama-repo-perpustakaan
+```
 
-The Laravel framework is open-sourced software licensed under the [MIT license](https://opensource.org/licenses/MIT).
+### 2. Install Dependencies
+
+Install library backend (Laravel) dan frontend (Bootstrap/Vite).
+
+```bash
+composer install
+npm install
+```
+
+### 3. Konfigurasi Environment
+
+Salin file konfigurasi contoh:
+
+```bash
+cp .env.example .env
+```
+
+Buka file `.env` dan sesuaikan konfigurasi berikut:
+
+#### Database
+
+```env
+DB_CONNECTION=mysql
+DB_HOST=127.0.0.1
+DB_PORT=3306
+DB_DATABASE=db_perpustakaan
+DB_USERNAME=root
+DB_PASSWORD=
+```
+
+> Pastikan database `db_perpustakaan` sudah dibuat di phpMyAdmin atau MySQL.
+
+#### Email (Wajib untuk fitur Notifikasi)
+
+Gunakan SMTP Gmail (gunakan **App Password**, bukan password login biasa).
+
+```env
+MAIL_MAILER=smtp
+MAIL_HOST=smtp.gmail.com
+MAIL_PORT=587
+MAIL_USERNAME=email_anda@gmail.com
+MAIL_PASSWORD=app_password_anda
+MAIL_ENCRYPTION=tls
+MAIL_FROM_ADDRESS="noreply@perpustakaan.com"
+MAIL_FROM_NAME="Perpustakaan Digital"
+```
+
+### 4. Setup Aplikasi
+
+Jalankan perintah berikut secara berurutan:
+
+```bash
+# Generate key aplikasi
+php artisan key:generate
+
+# Migrasi tabel ke database
+php artisan migrate
+
+# Link folder storage (PENTING: agar gambar cover bisa muncul)
+php artisan storage:link
+
+# Build aset frontend
+npm run build
+```
+
+---
+
+## 👤 Membuat Akun Admin
+
+Karena halaman registrasi publik dimatikan demi keamanan, buat akun Admin pertama melalui terminal.
+
+Jalankan Tinker:
+
+```bash
+php artisan tinker
+```
+
+Copy-paste kode berikut ke dalam terminal Tinker:
+
+```php
+$user = new App\Models\User();
+$user->name = 'Administrator';
+$user->email = 'admin@perpustakaan.com';
+$user->password = bcrypt('password123');
+$user->save();
+exit;
+```
+
+Login dengan:
+
+* **Email:** [admin@perpustakaan.com](mailto:admin@perpustakaan.com)
+* **Password:** password123
+
+---
+
+## 🏃‍♂️ Cara Menjalankan Aplikasi
+
+### 1. Jalankan Server Web
+
+```bash
+php artisan serve
+```
+
+Buka browser di: `http://127.0.0.1:8000`
+
+### 2. Jalankan Scheduler (Email Otomatis)
+
+Agar pengingat H-1 berjalan, buka terminal baru dan jalankan:
+
+```bash
+php artisan schedule:work
+```
+
+---
+
+## 📖 Panduan Penggunaan Singkat
+
+* **Login Admin:** Masuk ke `/login` menggunakan akun admin.
+
+### Tambah Data Master
+
+1. Buat **Kategori Buku** terlebih dahulu.
+2. Buat **Buku Induk**, upload cover, lalu isi deskripsi.
+3. Masuk ke detail buku, klik **Kelola Stok** untuk menambah jumlah copy.
+
+### Tambah Anggota
+
+* Daftarkan member baru.
+* Pastikan email member valid agar menerima notifikasi.
+
+### Transaksi
+
+* Masuk menu **Peminjaman**.
+* Pilih Member dan Buku.
+* Untuk pengembalian, klik tombol **Ceklis (Selesai)**. Denda akan muncul jika terlambat.
+
+---
+
+## ❓ Troubleshooting
+
+* **Gambar Cover Tidak Muncul**
+
+  * Pastikan sudah menjalankan `php artisan storage:link`.
+  * Jika masih bermasalah, hapus folder `public/storage` lalu jalankan ulang perintah tersebut.
+
+* **Email Error / Gagal Kirim**
+
+  * Pastikan koneksi internet stabil.
+  * Periksa konfigurasi `MAIL_` di `.env`.
+  * Jika menggunakan Gmail, aktifkan 2-Step Verification dan gunakan **App Password**.
+
+
+Dibuat untuk keperluan manajemen perpustakaan.
